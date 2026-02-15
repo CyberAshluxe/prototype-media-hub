@@ -140,19 +140,46 @@
             padding: 24px;
             background: white;
             transition: all 0.3s ease;
-            cursor: pointer;
+            position: relative;
         }
 
         .media-card:hover {
-            box-shadow: 0 8px 24px rgba(255, 92, 92, 0.15);
-            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(255, 92, 92, 0.18);
+            border-color: var(--primary);
+            transform: translateY(-4px);
+        }
+
+        .media-card:hover .card-image {
+            filter: brightness(1);
+            transform: scale(1.02);
+        }
+
+        .media-card:hover .card-image::before {
+            opacity: 0.8;
+        }
+
+        .media-card:hover .card-image::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .card-description {
+            font-size: 13px;
+            color: var(--gray);
+            line-height: 1.5;
+            margin-bottom: 16px;
+            min-height: 39px;
         }
 
         .card-header {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 12px;
             margin-bottom: 16px;
+        }
+
+        .card-header > div:last-child {
+            flex: 1;
         }
 
         .card-icon {
@@ -172,6 +199,7 @@
             font-size: 16px;
             font-weight: 700;
             letter-spacing: 1px;
+            margin-bottom: 4px;
         }
 
         .card-title .light {
@@ -179,10 +207,20 @@
             color: var(--gray);
         }
 
+        .card-subtitle {
+            font-size: 12px;
+            color: var(--gray);
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
         .card-image {
             width: 100%;
             aspect-ratio: 1;
             background: linear-gradient(135deg, #333 0%, #555 100%);
+            background-size: 110%;
+            background-position: center;
             border-radius: var(--radius);
             display: flex;
             align-items: center;
@@ -190,6 +228,60 @@
             color: white;
             font-size: 48px;
             margin: 16px 0;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            filter: brightness(0.95);
+        }
+
+        .card-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(255,92,92,0.15) 100%);
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .card-image::after {
+            content: '▶';
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: rgba(255,92,92,0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            z-index: 2;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+            left: 50%;
+            top: 50%;
+            margin-left: -30px;
+            margin-top: -30px;
+        }
+
+        .card:hover .card-image::before {
+            opacity: 0.8;
+        }
+
+        .card:hover .card-image::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .card:hover .card-image {
+            filter: brightness(1);
+            transform: scale(1.02);
         }
 
         .card-description {
@@ -237,6 +329,8 @@
         .action-btn:hover {
             background: var(--primary);
             color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 92, 92, 0.2);
         }
 
         .action-btn.primary {
@@ -246,6 +340,7 @@
 
         .action-btn.primary:hover {
             background: #ff3f3f;
+            box-shadow: 0 4px 16px rgba(255, 92, 92, 0.3);
         }
 
         @media (max-width: 1024px) {
@@ -384,11 +479,14 @@
                 <div class="media-card">
                     <div class="card-header">
                         <div class="card-icon">♪</div>
-                        <div class="card-title">21 <span class="light">SONGS</span></div>
+                        <div>
+                            <div class="card-title">21 <span class="light">SONGS</span></div>
+                            <div class="card-subtitle">Complete Album • MP3 + Karaoke</div>
+                        </div>
                     </div>
                     <div class="card-image">♫</div>
                     <div class="card-description">
-                        Complete album with 21 tracks featuring curated collaborations and reimagined arrangements. Experience both standard and karaoke versions.
+                        21 curated tracks with advanced collaborations and reimagined arrangements. Full production quality in both standard and karaoke versions.
                     </div>
                     <div class="card-tags">
                         <span class="tag">MP3</span>
@@ -403,11 +501,14 @@
                 <div class="media-card">
                     <div class="card-header">
                         <div class="card-icon">♫</div>
-                        <div class="card-title">musical<span class="light">SCORE</span></div>
+                        <div>
+                            <div class="card-title">musical<span class="light">SCORE</span></div>
+                            <div class="card-subtitle">Orchestral • PDF</div>
+                        </div>
                     </div>
                     <div class="card-image">🎼</div>
                     <div class="card-description">
-                        Orchestral arrangements and musical compositions showcasing conductor artistry and ensemble performances.
+                        Professional orchestral arrangements showcasing conductor artistry and ensemble performances. High-quality scores ready for performance.
                     </div>
                     <div class="card-tags">
                         <span class="tag">SCORE</span>
@@ -422,11 +523,14 @@
                 <div class="media-card">
                     <div class="card-header">
                         <div class="card-icon">🎧</div>
-                        <div class="card-title">AUDIO<span class="light">book</span></div>
+                        <div>
+                            <div class="card-title">AUDIO<span class="light">book</span></div>
+                            <div class="card-subtitle">Multi-language • Narrated</div>
+                        </div>
                     </div>
                     <div class="card-image">📚</div>
                     <div class="card-description">
-                        Professionally narrated audio experience available in multiple languages including English, Italian, and Polish.
+                        Professionally narrated in English, Italian, and Polish. Premium audio quality with chapter-based navigation for seamless listening.
                     </div>
                     <div class="card-tags">
                         <span class="tag">ENGLISH</span>
@@ -441,11 +545,14 @@
                 <div class="media-card">
                     <div class="card-header">
                         <div class="card-icon">📖</div>
-                        <div class="card-title">KINDLE<span class="light">lite</span></div>
+                        <div>
+                            <div class="card-title">KINDLE<span class="light">lite</span></div>
+                            <div class="card-subtitle">DRM-Free • eBook</div>
+                        </div>
                     </div>
                     <div class="card-image">📕</div>
                     <div class="card-description">
-                        Lightweight digital edition optimized for all reading devices with enhanced typography and responsive design.
+                        Lightweight digital edition optimized for all reading devices. Enhanced typography, responsive design, and full DRM-free freedom.
                     </div>
                     <div class="card-tags">
                         <span class="tag">EBOOK</span>
@@ -460,11 +567,14 @@
                 <div class="media-card">
                     <div class="card-header">
                         <div class="card-icon">Aa</div>
-                        <div class="card-title">CLOCHARD<span class="light">FONT</span></div>
+                        <div>
+                            <div class="card-title">CLOCHARD<span class="light">FONT</span></div>
+                            <div class="card-subtitle">Custom Typeface • Editorial</div>
+                        </div>
                     </div>
                     <div class="card-image">🔤</div>
                     <div class="card-description">
-                        Custom typeface designed specifically for editorial and display typography with distinctive character and personality.
+                        Custom typeface designed for editorial and display typography. Distinctive character across all weights with extensive glyphs.
                     </div>
                     <div class="card-tags">
                         <span class="tag">TTF</span>
@@ -480,11 +590,14 @@
                 <div class="media-card">
                     <div class="card-header">
                         <div class="card-icon">📷</div>
-                        <div class="card-title">PLATES<span class="light">clocharism</span></div>
+                        <div>
+                            <div class="card-title">PLATES<span class="light">clocharism</span></div>
+                            <div class="card-subtitle">Photography • Archive</div>
+                        </div>
                     </div>
                     <div class="card-image">🖼</div>
                     <div class="card-description">
-                        Visual documentation and archival collection showcasing contemporary artistic vision and cultural moments through photography.
+                        Visual documentation and archival collection of contemporary artistic vision. High-resolution photographs from multiple curated collections.
                     </div>
                     <div class="card-tags">
                         <span class="tag">ARCHIVE</span>
