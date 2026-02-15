@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clochard Font - Custom Typeface</title>
+    <link rel="stylesheet" href="css/shared.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap');
+
+        body {
+            background: white;
+        }
+
+        .header {
+            background: var(--light);
+            padding: 40px 20px;
+            border-bottom: 2px solid var(--primary);
+            margin-bottom: 40px;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .title-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .title-text {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            color: var(--gray);
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-size: 13px;
+            margin-bottom: 20px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .back-link:hover {
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+        }
+
+        .font-showcase {
+            border: 2px solid var(--primary);
+            padding: 40px;
+            margin-bottom: 30px;
+            background: white;
+            text-align: center;
+        }
+
+        .font-display-large {
+            font-family: 'Merriweather', serif;
+            font-size: 64px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .font-display-medium {
+            font-family: 'Merriweather', serif;
+            font-size: 32px;
+            font-weight: 400;
+            letter-spacing: 1px;
+            line-height: 1.4;
+            color: var(--gray);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .info-panel {
+            border: 2px solid var(--primary);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .panel-title {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .panel-content {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--gray);
+        }
+
+        .spec-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .spec-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        .spec-row:last-child {
+            border-bottom: none;
+        }
+
+        .spec-label {
+            color: var(--gray);
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .spec-value {
+            font-weight: 500;
+        }
+
+        .section-header {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            margin: 40px 0 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .samples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .sample-card {
+            border: 1px solid var(--border);
+            padding: 20px;
+            background: var(--light);
+            border-radius: var(--radius);
+        }
+
+        .sample-title {
+            font-family: 'Merriweather', serif;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .sample-text {
+            font-family: 'Merriweather', serif;
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--gray);
+        }
+
+        .download-section {
+            border: 2px solid var(--primary);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: center;
+            text-align: center;
+        }
+
+        .download-title {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .download-description {
+            font-size: 13px;
+            color: var(--gray);
+            max-width: 500px;
+        }
+
+        .download-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .download-btn {
+            padding: 12px 24px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border-radius: var(--radius);
+            transition: background 0.2s ease;
+        }
+
+        .download-btn:hover {
+            background: #ff3f3f;
+        }
+
+        .download-btn.secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .download-btn.secondary:hover {
+            background: var(--light);
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .font-display-large {
+                font-size: 40px;
+            }
+
+            .font-display-medium {
+                font-size: 20px;
+            }
+
+            .samples-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .title-text {
+                font-size: 24px;
+            }
+
+            .download-buttons {
+                flex-direction: column;
+            }
+
+            .download-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <a href="index.html" class="back-link">← Back to Hub</a>
+            <div class="page-title">
+                <div class="title-icon">Aa</div>
+                <span class="title-text">CLOCHARD<span style="color: var(--gray); font-weight: 400;">FONT</span></span>
+            </div>
+            <div class="subtitle">Custom Typeface for Editorial & Display</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Font Showcase -->
+        <div class="font-showcase">
+            <div class="font-display-large">Clochard Font</div>
+            <div class="font-display-medium">Elegant Typography for Modern Design</div>
+        </div>
+
+        <!-- About & Specs -->
+        <div class="grid-2">
+            <div class="info-panel">
+                <div class="panel-title">About Font</div>
+                <div class="panel-content">
+                    Clochard is a distinctive custom typeface designed specifically for editorial and display typography. Created with careful attention to letterforms, spacing, and character, it brings personality and elegance to any design project while maintaining excellent readability.
+                </div>
+            </div>
+
+            <div class="info-panel">
+                <div class="panel-title">Specifications</div>
+                <div class="spec-grid">
+                    <div class="spec-row">
+                        <span class="spec-label">Format</span>
+                        <span class="spec-value">TTF, OTF</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Weights</span>
+                        <span class="spec-value">Regular, Bold</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Variable Font</span>
+                        <span class="spec-value">Yes</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Glyphs</span>
+                        <span class="spec-value">500+</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Languages</span>
+                        <span class="spec-value">Latin, Extended</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Text Samples -->
+        <div>
+            <div class="section-header">Text Samples</div>
+            <div class="samples-grid">
+                <div class="sample-card">
+                    <div class="sample-title">Editorial Heading</div>
+                    <div class="sample-text">
+                        The typeface excels in creating compelling editorial presentations with its distinctive character and refined proportions.
+                    </div>
+                </div>
+                <div class="sample-card">
+                    <div class="sample-title">Display Typography</div>
+                    <div class="sample-text">
+                        Perfect for book covers, posters, and promotional materials where visual impact and personality matter most.
+                    </div>
+                </div>
+                <div class="sample-card">
+                    <div class="sample-title">Body Text Paragraph</div>
+                    <div class="sample-text">
+                        While primarily designed for display, Clochard maintains excellent legibility at smaller sizes, making it suitable for body text in high-end publications.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Download Section -->
+        <div class="section-header">Download Font</div>
+        <div class="download-section">
+            <div class="download-title">Get Clochard Font</div>
+            <div class="download-description">
+                Available in multiple formats including TrueType, OpenType, and Variable font. All formats are production-ready and include extensive character sets.
+            </div>
+            <div class="download-buttons">
+                <button class="download-btn">⬇ Download TTF</button>
+                <button class="download-btn">⬇ Download OTF</button>
+                <button class="download-btn secondary">📦 Variable Font</button>
+                <button class="download-btn secondary">📖 Documentation</button>
+            </div>
+        </div>
+
+        <!-- License Info -->
+        <div>
+            <div class="section-header">License & Usage</div>
+            <div style="border: 1px solid var(--border); padding: 20px; border-radius: var(--radius);">
+                <p style="font-size: 13px; line-height: 1.8; color: var(--gray); margin-bottom: 12px;">
+                    <strong style="color: var(--dark);">Creative Commons License:</strong> Free for personal and commercial use with attribution. 
+                    The font is provided as-is and may be used in print, digital, and web projects.
+                </p>
+                <p style="font-size: 13px; line-height: 1.8; color: var(--gray);">
+                    <strong style="color: var(--dark);">No Modifications:</strong> This font may not be modified or redistributed without explicit permission from the designer.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/player.js"></script>
+</body>
+</html>

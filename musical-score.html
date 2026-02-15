@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musical Score - Orchestral Compositions</title>
+    <link rel="stylesheet" href="css/shared.css">
+    <style>
+        body {
+            background: white;
+        }
+
+        .header {
+            background: var(--light);
+            padding: 40px 20px;
+            border-bottom: 2px solid var(--primary);
+            margin-bottom: 40px;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .header-info {
+            flex: 1;
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .title-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .title-text {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            color: var(--gray);
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+        }
+
+        .scores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .score-card {
+            border: 2px solid var(--primary);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .score-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+        }
+
+        .score-title {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .score-type {
+            background: var(--dark);
+            color: white;
+            padding: 4px 10px;
+            font-size: 10px;
+            letter-spacing: 0.5px;
+            border-radius: var(--radius);
+        }
+
+        .score-image {
+            width: 100%;
+            aspect-ratio: 3/4;
+            background: linear-gradient(135deg, #333 0%, #555 100%);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 64px;
+        }
+
+        .score-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: var(--gray);
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .info-value {
+            font-weight: 500;
+        }
+
+        .score-description {
+            color: var(--gray);
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .score-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .score-btn {
+            flex: 1;
+            padding: 10px 16px;
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--dark);
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border-radius: var(--radius);
+            transition: all 0.2s ease;
+        }
+
+        .score-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .score-btn.primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .section-header {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            margin: 40px 0 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .composers-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid var(--border);
+        }
+
+        .composer-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .composer-item {
+            padding: 16px;
+            background: var(--light);
+            border-radius: var(--radius);
+        }
+
+        .composer-name {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .composer-details {
+            font-size: 12px;
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-size: 13px;
+            margin-bottom: 20px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .back-link:hover {
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+            }
+
+            .scores-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .composer-list {
+                grid-template-columns: 1fr;
+            }
+
+            .title-text {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="header-info">
+                <a href="index.html" class="back-link">← Back to Hub</a>
+                <div class="page-title">
+                    <div class="title-icon">♫</div>
+                    <span class="title-text">Musical<span style="color: var(--gray); font-weight: 400;">SCORE</span></span>
+                </div>
+                <div class="subtitle">Orchestral Arrangements & Compositions</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Scores Grid -->
+        <div class="scores-grid">
+            <!-- Score 1 -->
+            <div class="score-card">
+                <div class="score-header">
+                    <div class="score-title">Symphony No. 1</div>
+                    <span class="score-type">PDF</span>
+                </div>
+                <div class="score-image">🎼</div>
+                <div class="score-info">
+                    <div class="info-row">
+                        <span class="info-label">Composer</span>
+                        <span class="info-value">Master Composer</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Duration</span>
+                        <span class="info-value">45 minutes</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Movements</span>
+                        <span class="info-value">4</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Instruments</span>
+                        <span class="info-value">Full Orchestra</span>
+                    </div>
+                </div>
+                <div class="score-description">
+                    Grand orchestral composition featuring complex harmonic structures and dynamic instrumental arrangements.
+                </div>
+                <div class="score-actions">
+                    <button class="score-btn primary">Download PDF</button>
+                    <button class="score-btn">Preview</button>
+                </div>
+            </div>
+
+            <!-- Score 2 -->
+            <div class="score-card">
+                <div class="score-header">
+                    <div class="score-title">Concerto for Strings</div>
+                    <span class="score-type">PDF</span>
+                </div>
+                <div class="score-image">🎻</div>
+                <div class="score-info">
+                    <div class="info-row">
+                        <span class="info-label">Composer</span>
+                        <span class="info-value">String Master</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Duration</span>
+                        <span class="info-value">32 minutes</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Movements</span>
+                        <span class="info-value">3</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Instruments</span>
+                        <span class="info-value">String Ensemble</span>
+                    </div>
+                </div>
+                <div class="score-description">
+                    Elegant string arrangement showcasing violin virtuosity and lush harmonic textures throughout all movements.
+                </div>
+                <div class="score-actions">
+                    <button class="score-btn primary">Download PDF</button>
+                    <button class="score-btn">Preview</button>
+                </div>
+            </div>
+
+            <!-- Score 3 -->
+            <div class="score-card">
+                <div class="score-header">
+                    <div class="score-title">Chamber Suite</div>
+                    <span class="score-type">PDF</span>
+                </div>
+                <div class="score-image">🎺</div>
+                <div class="score-info">
+                    <div class="info-row">
+                        <span class="info-label">Composer</span>
+                        <span class="info-value">Chamber Specialist</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Duration</span>
+                        <span class="info-value">28 minutes</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Movements</span>
+                        <span class="info-value">5</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Instruments</span>
+                        <span class="info-value">Chamber Ensemble</span>
+                    </div>
+                </div>
+                <div class="score-description">
+                    Intimate chamber work combining classical forms with contemporary compositional techniques and instrumentation.
+                </div>
+                <div class="score-actions">
+                    <button class="score-btn primary">Download PDF</button>
+                    <button class="score-btn">Preview</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Composers Section -->
+        <div class="composers-section">
+            <div class="section-header">Featured Composers</div>
+            <div class="composer-list">
+                <div class="composer-item">
+                    <div class="composer-name">Master Composer</div>
+                    <div class="composer-details">
+                        Renowned symphonic composer with works performed by leading orchestras worldwide. Specializes in grand orchestral arrangements and innovative harmonic language.
+                    </div>
+                </div>
+                <div class="composer-item">
+                    <div class="composer-name">String Master</div>
+                    <div class="composer-details">
+                        Expert in string arrangements and instrumental composition. Known for elegant melodies and sophisticated orchestration techniques.
+                    </div>
+                </div>
+                <div class="composer-item">
+                    <div class="composer-name">Chamber Specialist</div>
+                    <div class="composer-details">
+                        Focused on chamber music and contemporary classical forms. Combines traditional structures with modern compositional approaches.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/player.js"></script>
+</body>
+</html>

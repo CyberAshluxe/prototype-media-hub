@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFC Media Hub - Access Portal</title>
+    <link rel="stylesheet" href="css/shared.css">
+    <style>
+        body {
+            background: white;
+        }
+
+        .hub-wrapper {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 0;
+            min-height: 100vh;
+        }
+
+        /* Left Sidebar - NFC Hub */
+        .sidebar {
+            background: white;
+            border-right: 2px solid var(--primary);
+            padding: 40px 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 30px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 30px;
+        }
+
+        .hub-logo {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .hub-subtitle {
+            font-size: 11px;
+            color: var(--gray);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .hub-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            flex: 1;
+        }
+
+        .hub-item {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .hub-item:hover {
+            background: var(--light);
+            color: var(--primary);
+            padding-left: 24px;
+        }
+
+        .hub-item.active {
+            background: var(--primary);
+            color: white;
+            border-left: 4px solid var(--primary);
+            padding-left: 16px;
+        }
+
+        .hub-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 14px;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 40px;
+        }
+
+        .header-section {
+            margin-bottom: 50px;
+        }
+
+        .page-title {
+            font-size: 42px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .title-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            color: var(--gray);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .media-card {
+            border: 2px solid var(--primary);
+            padding: 24px;
+            background: white;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .media-card:hover {
+            box-shadow: 0 8px 24px rgba(255, 92, 92, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .card-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .card-title .light {
+            font-weight: 400;
+            color: var(--gray);
+        }
+
+        .card-image {
+            width: 100%;
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #333 0%, #555 100%);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+            margin: 16px 0;
+        }
+
+        .card-description {
+            font-size: 13px;
+            color: var(--gray);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .card-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .tag {
+            background: var(--dark);
+            color: white;
+            padding: 3px 10px;
+            font-size: 10px;
+            letter-spacing: 0.5px;
+            border-radius: var(--radius);
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 10px 16px;
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--dark);
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border-radius: var(--radius);
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .action-btn.primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .action-btn.primary:hover {
+            background: #ff3f3f;
+        }
+
+        @media (max-width: 1024px) {
+            .hub-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-right: none;
+                border-bottom: 2px solid var(--primary);
+                padding: 20px 0;
+                flex-direction: row;
+            }
+
+            .sidebar-header {
+                padding: 0 20px;
+                border-bottom: none;
+                margin-bottom: 0;
+                margin-right: 20px;
+                border-right: 1px solid var(--border);
+            }
+
+            .hub-nav {
+                flex-direction: row;
+                overflow-x: auto;
+            }
+
+            .hub-item {
+                border-bottom: none;
+                border-right: 1px solid var(--border);
+            }
+
+            .main-content {
+                padding: 30px 20px;
+            }
+
+            .page-title {
+                font-size: 32px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hub-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                flex-direction: column;
+                padding: 20px 0;
+                border: none;
+            }
+
+            .sidebar-header {
+                padding: 10px 20px 15px;
+                margin-bottom: 0;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .hub-nav {
+                flex-direction: column;
+                max-height: auto;
+            }
+
+            .hub-item {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .items-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hub-wrapper">
+        <!-- Left Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="hub-logo">NFC<span style="color: var(--primary);">bag</span></div>
+                <div class="hub-subtitle">Media Hub</div>
+            </div>
+            <nav class="hub-nav">
+                <a href="index.html" class="hub-item active">
+                    <div class="hub-icon">🏠</div>
+                    <span>Hub Overview</span>
+                </a>
+                <a href="21-songs.html" class="hub-item">
+                    <div class="hub-icon">♪</div>
+                    <span>21 Songs</span>
+                </a>
+                <a href="musical-score.html" class="hub-item">
+                    <div class="hub-icon">♫</div>
+                    <span>Musical Score</span>
+                </a>
+                <a href="audiobook.html" class="hub-item">
+                    <div class="hub-icon">🎧</div>
+                    <span>Audiobook</span>
+                </a>
+                <a href="kindle.html" class="hub-item">
+                    <div class="hub-icon">📖</div>
+                    <span>Kindle</span>
+                </a>
+                <a href="font.html" class="hub-item">
+                    <div class="hub-icon">Aa</div>
+                    <span>Clochard Font</span>
+                </a>
+                <a href="plates.html" class="hub-item">
+                    <div class="hub-icon">📷</div>
+                    <span>Plates</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <div class="header-section">
+                <div class="page-title">
+                    <div class="title-icon">🎯</div>
+                    <span>NFC Media<span style="color: var(--primary);">Zone</span></span>
+                </div>
+                <div class="page-subtitle">Curated Media Collection - Direct Access Portal</div>
+            </div>
+
+            <!-- All Media Items Grid -->
+            <div class="items-grid">
+                <!-- 21 Songs -->
+                <div class="media-card">
+                    <div class="card-header">
+                        <div class="card-icon">♪</div>
+                        <div class="card-title">21 <span class="light">SONGS</span></div>
+                    </div>
+                    <div class="card-image">♫</div>
+                    <div class="card-description">
+                        Complete album with 21 tracks featuring curated collaborations and reimagined arrangements. Experience both standard and karaoke versions.
+                    </div>
+                    <div class="card-tags">
+                        <span class="tag">MP3</span>
+                        <span class="tag">KARAOKE</span>
+                    </div>
+                    <div class="card-actions">
+                        <a href="21-songs.html" class="action-btn primary">Open Player</a>
+                    </div>
+                </div>
+
+                <!-- Musical Score -->
+                <div class="media-card">
+                    <div class="card-header">
+                        <div class="card-icon">♫</div>
+                        <div class="card-title">musical<span class="light">SCORE</span></div>
+                    </div>
+                    <div class="card-image">🎼</div>
+                    <div class="card-description">
+                        Orchestral arrangements and musical compositions showcasing conductor artistry and ensemble performances.
+                    </div>
+                    <div class="card-tags">
+                        <span class="tag">SCORE</span>
+                        <span class="tag">PDF</span>
+                    </div>
+                    <div class="card-actions">
+                        <a href="musical-score.html" class="action-btn primary">View Scores</a>
+                    </div>
+                </div>
+
+                <!-- Audiobook -->
+                <div class="media-card">
+                    <div class="card-header">
+                        <div class="card-icon">🎧</div>
+                        <div class="card-title">AUDIO<span class="light">book</span></div>
+                    </div>
+                    <div class="card-image">📚</div>
+                    <div class="card-description">
+                        Professionally narrated audio experience available in multiple languages including English, Italian, and Polish.
+                    </div>
+                    <div class="card-tags">
+                        <span class="tag">ENGLISH</span>
+                        <span class="tag">ITALIAN</span>
+                    </div>
+                    <div class="card-actions">
+                        <a href="audiobook.html" class="action-btn primary">Play Audiobook</a>
+                    </div>
+                </div>
+
+                <!-- Kindle -->
+                <div class="media-card">
+                    <div class="card-header">
+                        <div class="card-icon">📖</div>
+                        <div class="card-title">KINDLE<span class="light">lite</span></div>
+                    </div>
+                    <div class="card-image">📕</div>
+                    <div class="card-description">
+                        Lightweight digital edition optimized for all reading devices with enhanced typography and responsive design.
+                    </div>
+                    <div class="card-tags">
+                        <span class="tag">EBOOK</span>
+                        <span class="tag">DRM-FREE</span>
+                    </div>
+                    <div class="card-actions">
+                        <a href="kindle.html" class="action-btn primary">Read</a>
+                    </div>
+                </div>
+
+                <!-- Clochard Font -->
+                <div class="media-card">
+                    <div class="card-header">
+                        <div class="card-icon">Aa</div>
+                        <div class="card-title">CLOCHARD<span class="light">FONT</span></div>
+                    </div>
+                    <div class="card-image">🔤</div>
+                    <div class="card-description">
+                        Custom typeface designed specifically for editorial and display typography with distinctive character and personality.
+                    </div>
+                    <div class="card-tags">
+                        <span class="tag">TTF</span>
+                        <span class="tag">OTF</span>
+                        <span class="tag">VARIABLE</span>
+                    </div>
+                    <div class="card-actions">
+                        <a href="font.html" class="action-btn primary">Font Details</a>
+                    </div>
+                </div>
+
+                <!-- Plates Clocharism -->
+                <div class="media-card">
+                    <div class="card-header">
+                        <div class="card-icon">📷</div>
+                        <div class="card-title">PLATES<span class="light">clocharism</span></div>
+                    </div>
+                    <div class="card-image">🖼</div>
+                    <div class="card-description">
+                        Visual documentation and archival collection showcasing contemporary artistic vision and cultural moments through photography.
+                    </div>
+                    <div class="card-tags">
+                        <span class="tag">ARCHIVE</span>
+                        <span class="tag">HIGH-RES</span>
+                    </div>
+                    <div class="card-actions">
+                        <a href="plates.html" class="action-btn primary">Gallery</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/player.js"></script>
+    <script>
+        // Hub navigation highlighting
+        document.querySelectorAll('.hub-item').forEach(item => {
+            const href = item.getAttribute('href');
+            if (window.location.pathname.includes(href) || (href === 'index.html' && window.location.pathname.endsWith('/'))) {
+                item.classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>

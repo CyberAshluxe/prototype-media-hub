@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kindle Edition - DRM-Free Digital Book</title>
+    <link rel="stylesheet" href="css/shared.css">
+    <style>
+        body {
+            background: white;
+        }
+
+        .header {
+            background: var(--light);
+            padding: 40px 20px;
+            border-bottom: 2px solid var(--primary);
+            margin-bottom: 40px;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+        }
+
+        .header-info {
+            flex: 1;
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .title-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .title-text {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            color: var(--gray);
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-size: 13px;
+            margin-bottom: 20px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .back-link:hover {
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+        }
+
+        .book-showcase {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .book-cover-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .book-cover {
+            width: 100%;
+            aspect-ratio: 3/4;
+            background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
+            border-radius: var(--radius);
+            border: 2px solid var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--light);
+            font-size: 72px;
+        }
+
+        .download-section {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .download-btn {
+            padding: 14px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border-radius: var(--radius);
+            transition: background 0.2s ease;
+        }
+
+        .download-btn:hover {
+            background: #ff3f3f;
+        }
+
+        .book-info {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .info-card {
+            border: 1px solid var(--border);
+            padding: 16px;
+            border-radius: var(--radius);
+        }
+
+        .info-title {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--gray);
+            margin-bottom: 12px;
+        }
+
+        .info-content {
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .book-details {
+            border: 2px solid var(--primary);
+            padding: 20px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: var(--gray);
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .detail-value {
+            font-weight: 500;
+        }
+
+        .section-header {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            margin: 40px 0 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .formats-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid var(--border);
+        }
+
+        .formats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .format-card {
+            border: 2px solid var(--border);
+            padding: 20px;
+            border-radius: var(--radius);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .format-name {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .format-details {
+            font-size: 12px;
+            color: var(--gray);
+            line-height: 1.5;
+        }
+
+        .format-action {
+            align-self: flex-start;
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            border-radius: var(--radius);
+            transition: all 0.2s ease;
+        }
+
+        .format-action:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .table-of-contents {
+            border: 1px solid var(--border);
+            padding: 0;
+            margin-top: 20px;
+            border-radius: var(--radius);
+        }
+
+        .toc-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .toc-item:last-child {
+            border-bottom: none;
+        }
+
+        .toc-item:hover {
+            background: var(--light);
+        }
+
+        .toc-chapter {
+            font-weight: 500;
+        }
+
+        .toc-page {
+            color: var(--gray);
+        }
+
+        @media (max-width: 768px) {
+            .book-showcase {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .formats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .title-text {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="header-info">
+                <a href="index.html" class="back-link">← Back to Hub</a>
+                <div class="page-title">
+                    <div class="title-icon">📖</div>
+                    <span class="title-text">KINDLE<span style="color: var(--gray); font-weight: 400;">lite</span></span>
+                </div>
+                <div class="subtitle">DRM-Free Digital Edition</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Book Showcase -->
+        <div class="book-showcase">
+            <div class="book-cover-section">
+                <div class="book-cover">📕</div>
+                <div class="download-section">
+                    <button class="download-btn">⬇ Download EPUB</button>
+                    <button class="download-btn">⬇ Download MOBI</button>
+                    <button class="download-btn">⬇ Download PDF</button>
+                </div>
+            </div>
+
+            <div class="book-info">
+                <div class="info-card">
+                    <div class="info-title">About This Edition</div>
+                    <div class="info-content">
+                        Lightweight digital edition optimized for all reading devices with enhanced typography and responsive design. Fully DRM-free and compatible with any e-reader, tablet, or computer.
+                    </div>
+                </div>
+
+                <div class="book-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Format</span>
+                        <span class="detail-value">EPUB 3.0, MOBI, PDF</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Pages</span>
+                        <span class="detail-value">384</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">File Size</span>
+                        <span class="detail-value">2.4 MB</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Language</span>
+                        <span class="detail-value">English</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">DRM Protection</span>
+                        <span class="detail-value">None</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Publisher</span>
+                        <span class="detail-value">Independent</span>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-title">Features</div>
+                    <div class="info-content">
+                        <ul style="margin-left: 16px; line-height: 1.8;">
+                            <li>Responsive typography that adapts to any device</li>
+                            <li>Embedded fonts for consistent appearance</li>
+                            <li>Optimized for screen readers</li>
+                            <li>Compatible with all major e-readers</li>
+                            <li>High-quality PDF option with preserved formatting</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formats Section -->
+        <div class="formats-section">
+            <div class="section-header">Available Formats</div>
+            <div class="formats-grid">
+                <div class="format-card">
+                    <div class="format-name">EPUB 3.0</div>
+                    <div class="format-details">
+                        Modern, universal e-book format. Works on Kindle, Kobo, Apple Books, and most e-readers.
+                    </div>
+                    <button class="format-action">Download</button>
+                </div>
+                <div class="format-card">
+                    <div class="format-name">MOBI</div>
+                    <div class="format-details">
+                        Optimized for Amazon Kindle devices. Legacy format with excellent compatibility.
+                    </div>
+                    <button class="format-action">Download</button>
+                </div>
+                <div class="format-card">
+                    <div class="format-name">PDF</div>
+                    <div class="format-details">
+                        Fixed-layout format preserving exact design. Best for reading on computer or tablet.
+                    </div>
+                    <button class="format-action">Download</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table of Contents -->
+        <div>
+            <div class="section-header">Table of Contents</div>
+            <div class="table-of-contents">
+                <div class="toc-item">
+                    <span class="toc-chapter">Chapter 1: Introduction</span>
+                    <span class="toc-page">p. 1</span>
+                </div>
+                <div class="toc-item">
+                    <span class="toc-chapter">Chapter 2: The Journey Begins</span>
+                    <span class="toc-page">p. 15</span>
+                </div>
+                <div class="toc-item">
+                    <span class="toc-chapter">Chapter 3: Turning Points</span>
+                    <span class="toc-page">p. 48</span>
+                </div>
+                <div class="toc-item">
+                    <span class="toc-chapter">Chapter 4: Discoveries</span>
+                    <span class="toc-page">p. 92</span>
+                </div>
+                <div class="toc-item">
+                    <span class="toc-chapter">Chapter 5: Reflections</span>
+                    <span class="toc-page">p. 156</span>
+                </div>
+                <div class="toc-item">
+                    <span class="toc-chapter">Chapter 6: The Path Forward</span>
+                    <span class="toc-page">p. 234</span>
+                </div>
+                <div class="toc-item">
+                    <span class="toc-chapter">Chapter 7: Culmination</span>
+                    <span class="toc-page">p. 312</span>
+                </div>
+                <div class="toc-item">
+                    <span class="toc-chapter">Epilogue</span>
+                    <span class="toc-page">p. 356</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/player.js"></script>
+</body>
+</html>
