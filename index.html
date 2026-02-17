@@ -1,655 +1,705 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NFC Media Hub - Access Portal</title>
-    <link rel="stylesheet" href="css/shared.css">
+    <link rel="stylesheet" href="css/shared.css" />
     <style>
-        body {
-            background: url('assets/transparent%20bg.png') center/cover no-repeat fixed;
+      body {
+        background: url("assets/transparent%20bg.png") center/cover no-repeat
+          fixed;
+        background-attachment: fixed;
+        filter: brightness(1);
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("assets/transparent%20bg.png") center/cover no-repeat fixed;
+        filter: blur(2px);
+        z-index: -1;
+      }
+
+      .hub-wrapper {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0;
+        min-height: 100vh;
+        position: relative;
+      }
+
+      /* Left Sidebar - NFC Hub */
+      .sidebar {
+        background: white;
+        border-right: 2px solid var(--primary);
+        padding: 40px 0;
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 250px;
+        transform: translateX(-110%);
+        transition: transform 0.28s ease;
+        z-index: 60;
+      }
+
+      .sidebar-header {
+        padding: 0 20px 30px;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 30px;
+      }
+
+      .hub-logo {
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        margin-bottom: 8px;
+      }
+
+      .hub-subtitle {
+        font-size: 11px;
+        color: var(--gray);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+
+      .hub-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        flex: 1;
+      }
+
+      .hub-item {
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--border);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        color: var(--dark);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+      }
+
+      .hub-item:hover {
+        background: var(--light);
+        color: var(--primary);
+        padding-left: 24px;
+      }
+
+      .hub-item.active {
+        background: var(--primary);
+        color: white;
+        border-left: 4px solid var(--primary);
+        padding-left: 16px;
+      }
+
+      .hub-icon {
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 14px;
+      }
+
+      /* Main Content */
+      .main-content {
+        padding: 40px 20px;
+        transition: margin-left 0.28s ease;
+        width: 100%;
+      }
+
+      /* sidebar open state on body */
+      body.sidebar-open .sidebar {
+        transform: translateX(0);
+      }
+
+      /* overlay appears when sidebar is open */
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.35);
+        z-index: 50;
+      }
+
+      body.sidebar-open .sidebar-overlay {
+        display: block;
+      }
+
+      .header-section {
+        margin-bottom: 50px;
+      }
+
+      .page-title {
+        font-size: 42px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+      }
+
+      .logo-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        max-width: 160px; /* much tighter limit to keep logos inside card */
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      .logo-group img {
+        width: 100%;
+        height: auto;
+        max-height: 48px; /* smaller image height to prevent overflow */
+        object-fit: contain;
+        transition: all 0.2s ease;
+        display: block;
+      }
+
+      .page-title:hover .logo-group img:first-child {
+        transform: scale(1.1) translateY(-2px);
+      }
+
+      .page-title:hover .logo-group img:last-child {
+        transform: scale(1.08) rotate(10deg);
+      }
+
+      .sidebar-toggle {
+        width: 44px;
+        height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        background: white;
+        border: 1px solid var(--border);
+        cursor: pointer;
+        margin-right: 8px;
+        font-size: 18px;
+      }
+
+      .title-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: var(--dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 24px;
+      }
+
+      .page-subtitle {
+        font-size: 14px;
+        color: var(--gray);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        display: none;
+      }
+
+      .items-grid {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 24px;
+        width: 100%;
+        max-width: none;
+        margin: 0 auto;
+        padding: 0;
+        justify-content: center;
+        align-items: flex-start;
+      }
+
+      .home-link img {
+        width: 100%;
+        display: block;
+        border-radius: 2px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+      }
+
+      /* Specific sizing for the large NFC tag hero image */
+      .nfctags-home {
+        display: block;
+        width: 100%;
+        max-width: 240px;
+        margin: 0 auto;
+      }
+
+      .home-link {
+        display: block;
+        text-decoration: none;
+        width: 280px;
+        flex: 0 0 280px;
+        transition: all 0.3s ease;
+      }
+
+      .home-link:hover {
+        transform: translateY(-8px) scale(1.02);
+      }
+
+      .home-link:hover img {
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2), 0 8px 16px rgba(255, 92, 92, 0.15);
+      }
+
+      .home-link-group {
+        text-align: center;
+        width: 280px;
+        flex: 0 0 280px;
+      }
+
+      .nfclogo-small {
+        width: 48px;
+        margin: 8px auto 0;
+        display: block;
+      }
+
+      @media (max-width: 800px) {
+        .items-grid {
+          gap: 16px;
+          padding: 20px 16px;
         }
 
+        .home-link,
+        .home-link-group {
+          width: 100%;
+          max-width: 380px;
+          flex: 1 1 auto;
+        }
+        .logo-group { max-width: 140px; }
+        .logo-group img { max-height: 40px; }
+      }
+
+      .media-card {
+        border: 2px solid var(--primary);
+        padding: 24px;
+        background: white;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .media-card:hover {
+        box-shadow: 0 12px 32px rgba(255, 92, 92, 0.18);
+        border-color: var(--primary);
+        transform: translateY(-4px);
+      }
+
+      .media-card:hover .card-image {
+        filter: brightness(1);
+        transform: scale(1.02);
+      }
+
+      .media-card:hover .card-image::before {
+        opacity: 0.8;
+      }
+
+      .media-card:hover .card-image::after {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .card-description {
+        font-size: 13px;
+        color: var(--gray);
+        line-height: 1.5;
+        margin-bottom: 16px;
+        min-height: 39px;
+      }
+
+      .card-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      .card-header > div:last-child {
+        flex: 1;
+      }
+
+      .card-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 14px;
+        flex-shrink: 0;
+      }
+
+      .card-title {
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        margin-bottom: 4px;
+      }
+
+      .card-title .light {
+        font-weight: 400;
+        color: var(--gray);
+      }
+
+      .card-subtitle {
+        font-size: 12px;
+        color: var(--gray);
+        letter-spacing: 0.5px;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+      }
+
+      .card-image {
+        width: 100%;
+        aspect-ratio: 1;
+        background: linear-gradient(135deg, #333 0%, #555 100%);
+        background-size: 110%;
+        background-position: center;
+        border-radius: var(--radius);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 48px;
+        margin: 16px 0;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        filter: brightness(0.95);
+      }
+
+      .card-image::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0.1) 0%,
+          rgba(255, 92, 92, 0.15) 100%
+        );
+        opacity: 0.6;
+        transition: opacity 0.3s ease;
+        z-index: 1;
+      }
+
+      .card-image::after {
+        content: "▶";
+        position: absolute;
+        width: 60px;
+        height: 60px;
+        background: rgba(255, 92, 92, 0.9);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: white;
+        z-index: 2;
+        opacity: 0;
+        transform: scale(0.8);
+        transition: all 0.3s ease;
+        left: 50%;
+        top: 50%;
+        margin-left: -30px;
+        margin-top: -30px;
+      }
+
+      .card:hover .card-image::before {
+        opacity: 0.8;
+      }
+
+      .card:hover .card-image::after {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .card:hover .card-image {
+        filter: brightness(1);
+        transform: scale(1.02);
+      }
+
+      .card-description {
+        font-size: 13px;
+        color: var(--gray);
+        line-height: 1.6;
+        margin-bottom: 16px;
+      }
+
+      .card-tags {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-bottom: 16px;
+      }
+
+      .tag {
+        background: var(--dark);
+        color: white;
+        padding: 3px 10px;
+        font-size: 10px;
+        letter-spacing: 0.5px;
+        border-radius: var(--radius);
+      }
+
+      .card-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .action-btn {
+        flex: 1;
+        padding: 10px 16px;
+        background: white;
+        border: 2px solid var(--primary);
+        color: var(--dark);
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        cursor: pointer;
+        border-radius: var(--radius);
+        transition: all 0.2s ease;
+      }
+
+      .action-btn:hover {
+        background: var(--primary);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 92, 92, 0.2);
+      }
+
+      .action-btn.primary {
+        background: var(--primary);
+        color: white;
+      }
+
+      .action-btn.primary:hover {
+        background: #ff3f3f;
+        box-shadow: 0 4px 16px rgba(255, 92, 92, 0.3);
+      }
+
+      @media (max-width: 1024px) {
         .hub-wrapper {
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: 0;
-            min-height: 100vh;
-            position: relative;
+          grid-template-columns: 1fr;
         }
 
-        /* Left Sidebar - NFC Hub */
         .sidebar {
-            background: white;
-            border-right: 2px solid var(--primary);
-            padding: 40px 0;
-            display: flex;
-            flex-direction: column;
-            position: fixed;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 250px;
-            transform: translateX(-110%);
-            transition: transform 0.28s ease;
-            z-index: 60;
+          border-right: none;
+          border-bottom: 2px solid var(--primary);
+          padding: 20px 0;
+          flex-direction: row;
         }
 
         .sidebar-header {
-            padding: 0 20px 30px;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 30px;
-        }
-
-        .hub-logo {
-            font-size: 24px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            margin-bottom: 8px;
-        }
-
-        .hub-subtitle {
-            font-size: 11px;
-            color: var(--gray);
-            letter-spacing: 1px;
-            text-transform: uppercase;
+          padding: 0 20px;
+          border-bottom: none;
+          margin-bottom: 0;
+          margin-right: 20px;
+          border-right: 1px solid var(--border);
         }
 
         .hub-nav {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-            flex: 1;
+          flex-direction: row;
+          overflow-x: auto;
         }
 
         .hub-item {
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--border);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            color: var(--dark);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 13px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
+          border-bottom: none;
+          border-right: 1px solid var(--border);
         }
 
-        .hub-item:hover {
-            background: var(--light);
-            color: var(--primary);
-            padding-left: 24px;
-        }
-
-        .hub-item.active {
-            background: var(--primary);
-            color: white;
-            border-left: 4px solid var(--primary);
-            padding-left: 16px;
-        }
-
-        .hub-icon {
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            font-size: 14px;
-        }
-
-        /* Main Content */
         .main-content {
-            padding: 40px;
-            transition: margin-left 0.28s ease;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* sidebar open state on body */
-        body.sidebar-open .sidebar {
-            transform: translateX(0);
-        }
-
-        /* overlay appears when sidebar is open */
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.35);
-            z-index: 50;
-        }
-
-        body.sidebar-open .sidebar-overlay {
-            display: block;
-        }
-
-        .header-section {
-            margin-bottom: 50px;
+          padding: 30px 20px;
         }
 
         .page-title {
-            font-size: 42px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
+          font-size: 32px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .hub-wrapper {
+          grid-template-columns: 1fr;
         }
 
-        .sidebar-toggle {
-            width: 44px;
-            height: 44px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 6px;
-            background: white;
-            border: 1px solid var(--border);
-            cursor: pointer;
-            margin-right: 8px;
-            font-size: 18px;
+        .sidebar {
+          flex-direction: column;
+          padding: 20px 0;
+          border: none;
         }
 
-        .title-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: var(--dark);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 24px;
+        .sidebar-header {
+          padding: 10px 20px 15px;
+          margin-bottom: 0;
+          border-bottom: 1px solid var(--border);
         }
 
-        .page-subtitle {
-            font-size: 14px;
-            color: var(--gray);
-            letter-spacing: 1px;
-            text-transform: uppercase;
+        .hub-nav {
+          flex-direction: column;
+          max-height: auto;
+        }
+
+        .hub-item {
+          border-right: none;
+          border-bottom: 1px solid var(--border);
         }
 
         .items-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-            max-width: 520px;
-            margin: 0 auto;
-            padding: 6px 10px 40px;
+          grid-template-columns: 1fr;
         }
 
-        .home-link img {
-            width: 100%;
-            display: block;
-            border-radius: 2px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        .page-title {
+          font-size: 24px;
         }
 
-        /* Specific sizing for the large NFC tag hero image */
-        .nfctags-home {
-            display: block;
-            width: 90%;
-            max-width: 480px;
-            margin: 0 auto;
+        .main-content {
+          padding: 20px;
         }
-
-        .home-link {
-            display: block;
-            text-decoration: none;
-        }
-
-        .home-link-group {
-            text-align: center;
-        }
-
-        .nfclogo-small {
-            width: 48px;
-            margin: 8px auto 0;
-            display: block;
-        }
-
-        @media (min-width: 1200px) {
-            .items-grid {
-                max-width: none;
-                margin: 0 auto;
-                display: flex;
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 28px;
-                padding: 20px 40px;
-            }
-
-            /* Keep other home cards a consistent width, center them */
-            .home-link img {
-                width: 320px;
-            }
-
-            /* Make the nfctags hero smaller on wide screens */
-            .nfctags-home {
-                width: 280px;
-                max-width: 280px;
-            }
-
-            /* Ensure links behave as fixed-size cards */
-            .home-link {
-                flex: 0 0 auto;
-                max-width: 320px;
-            }
-
-            /* Make the NFC group behave like other cards so the grid wraps */
-            .home-link-group {
-                flex: 0 0 auto;
-                max-width: 320px;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-            }
-        }
-
-        .media-card {
-            border: 2px solid var(--primary);
-            padding: 24px;
-            background: white;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .media-card:hover {
-            box-shadow: 0 12px 32px rgba(255, 92, 92, 0.18);
-            border-color: var(--primary);
-            transform: translateY(-4px);
-        }
-
-        .media-card:hover .card-image {
-            filter: brightness(1);
-            transform: scale(1.02);
-        }
-
-        .media-card:hover .card-image::before {
-            opacity: 0.8;
-        }
-
-        .media-card:hover .card-image::after {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        .card-description {
-            font-size: 13px;
-            color: var(--gray);
-            line-height: 1.5;
-            margin-bottom: 16px;
-            min-height: 39px;
-        }
-
-        .card-header {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .card-header > div:last-child {
-            flex: 1;
-        }
-
-        .card-icon {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: var(--dark);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 14px;
-            flex-shrink: 0;
-        }
-
-        .card-title {
-            font-size: 16px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            margin-bottom: 4px;
-        }
-
-        .card-title .light {
-            font-weight: 400;
-            color: var(--gray);
-        }
-
-        .card-subtitle {
-            font-size: 12px;
-            color: var(--gray);
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-        }
-
-        .card-image {
-            width: 100%;
-            aspect-ratio: 1;
-            background: linear-gradient(135deg, #333 0%, #555 100%);
-            background-size: 110%;
-            background-position: center;
-            border-radius: var(--radius);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 48px;
-            margin: 16px 0;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            filter: brightness(0.95);
-        }
-
-        .card-image::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(255,92,92,0.15) 100%);
-            opacity: 0.6;
-            transition: opacity 0.3s ease;
-            z-index: 1;
-        }
-
-        .card-image::after {
-            content: '▶';
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            background: rgba(255,92,92,0.9);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-            z-index: 2;
-            opacity: 0;
-            transform: scale(0.8);
-            transition: all 0.3s ease;
-            left: 50%;
-            top: 50%;
-            margin-left: -30px;
-            margin-top: -30px;
-        }
-
-        .card:hover .card-image::before {
-            opacity: 0.8;
-        }
-
-        .card:hover .card-image::after {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        .card:hover .card-image {
-            filter: brightness(1);
-            transform: scale(1.02);
-        }
-
-        .card-description {
-            font-size: 13px;
-            color: var(--gray);
-            line-height: 1.6;
-            margin-bottom: 16px;
-        }
-
-        .card-tags {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-            margin-bottom: 16px;
-        }
-
-        .tag {
-            background: var(--dark);
-            color: white;
-            padding: 3px 10px;
-            font-size: 10px;
-            letter-spacing: 0.5px;
-            border-radius: var(--radius);
-        }
-
-        .card-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .action-btn {
-            flex: 1;
-            padding: 10px 16px;
-            background: white;
-            border: 2px solid var(--primary);
-            color: var(--dark);
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            cursor: pointer;
-            border-radius: var(--radius);
-            transition: all 0.2s ease;
-        }
-
-        .action-btn:hover {
-            background: var(--primary);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 92, 92, 0.2);
-        }
-
-        .action-btn.primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .action-btn.primary:hover {
-            background: #ff3f3f;
-            box-shadow: 0 4px 16px rgba(255, 92, 92, 0.3);
-        }
-
-        @media (max-width: 1024px) {
-            .hub-wrapper {
-                grid-template-columns: 1fr;
-            }
-
-            .sidebar {
-                border-right: none;
-                border-bottom: 2px solid var(--primary);
-                padding: 20px 0;
-                flex-direction: row;
-            }
-
-            .sidebar-header {
-                padding: 0 20px;
-                border-bottom: none;
-                margin-bottom: 0;
-                margin-right: 20px;
-                border-right: 1px solid var(--border);
-            }
-
-            .hub-nav {
-                flex-direction: row;
-                overflow-x: auto;
-            }
-
-            .hub-item {
-                border-bottom: none;
-                border-right: 1px solid var(--border);
-            }
-
-            .main-content {
-                padding: 30px 20px;
-            }
-
-            .page-title {
-                font-size: 32px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .hub-wrapper {
-                grid-template-columns: 1fr;
-            }
-
-            .sidebar {
-                flex-direction: column;
-                padding: 20px 0;
-                border: none;
-            }
-
-            .sidebar-header {
-                padding: 10px 20px 15px;
-                margin-bottom: 0;
-                border-bottom: 1px solid var(--border);
-            }
-
-            .hub-nav {
-                flex-direction: column;
-                max-height: auto;
-            }
-
-            .hub-item {
-                border-right: none;
-                border-bottom: 1px solid var(--border);
-            }
-
-            .items-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .page-title {
-                font-size: 24px;
-            }
-
-            .main-content {
-                padding: 20px;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="hub-wrapper">
-        <!-- Left Sidebar Navigation -->
-        <div class="sidebar">
-            <div class="sidebar-header">
-                <div class="hub-logo">NFC<span style="color: var(--primary);">bag</span></div>
-                <div class="hub-subtitle">Media Hub</div>
+      <!-- Left Sidebar Navigation -->
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <div class="hub-logo">
+            NFC<span style="color: var(--primary)">bag</span>
+          </div>
+          <div class="hub-subtitle">Media Hub</div>
+        </div>
+        <nav class="hub-nav">
+          <a href="index.html" class="hub-item active">
+            <div class="hub-icon">🏠</div>
+            <span>Hub Overview</span>
+          </a>
+          <a href="21-songs.html" class="hub-item">
+            <div class="hub-icon">♪</div>
+            <span>21 Songs</span>
+          </a>
+          <a href="musical-score.html" class="hub-item">
+            <div class="hub-icon">♫</div>
+            <span>Musical Score</span>
+          </a>
+          <a href="audiobook.html" class="hub-item">
+            <div class="hub-icon">🎧</div>
+            <span>Audiobook</span>
+          </a>
+          <a href="kindle.html" class="hub-item">
+            <div class="hub-icon">📖</div>
+            <span>Kindle</span>
+          </a>
+          <a href="font.html" class="hub-item">
+            <div class="hub-icon">Aa</div>
+            <span>Clochard Font</span>
+          </a>
+          <a href="plates.html" class="hub-item">
+            <div class="hub-icon">📷</div>
+            <span>Plates</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Main Content Area -->
+      <div class="main-content">
+        <div class="header-section">
+          <div class="page-title">
+            <button
+              id="sidebarToggle"
+              class="sidebar-toggle"
+              aria-label="Toggle menu"
+            >
+              ☰
+            </button>
+            <div class="logo-group">
+              <img src="assets/nfctags%20home.png" alt="NFC Tags" />
+              <img src="assets/nfclogo.png" alt="NFC Logo" style="height: 40px;" />
             </div>
-            <nav class="hub-nav">
-                <a href="index.html" class="hub-item active">
-                    <div class="hub-icon">🏠</div>
-                    <span>Hub Overview</span>
-                </a>
-                <a href="21-songs.html" class="hub-item">
-                    <div class="hub-icon">♪</div>
-                    <span>21 Songs</span>
-                </a>
-                <a href="musical-score.html" class="hub-item">
-                    <div class="hub-icon">♫</div>
-                    <span>Musical Score</span>
-                </a>
-                <a href="audiobook.html" class="hub-item">
-                    <div class="hub-icon">🎧</div>
-                    <span>Audiobook</span>
-                </a>
-                <a href="kindle.html" class="hub-item">
-                    <div class="hub-icon">📖</div>
-                    <span>Kindle</span>
-                </a>
-                <a href="font.html" class="hub-item">
-                    <div class="hub-icon">Aa</div>
-                    <span>Clochard Font</span>
-                </a>
-                <a href="plates.html" class="hub-item">
-                    <div class="hub-icon">📷</div>
-                    <span>Plates</span>
-                </a>
-            </nav>
+          </div>
+          <div class="page-subtitle">
+            Curated Media Collection - Direct Access Portal
+          </div>
         </div>
 
-        <!-- Main Content Area -->
-        <div class="main-content">
-            <div class="header-section">
-                <div class="page-title">
-                    <button id="sidebarToggle" class="sidebar-toggle" aria-label="Toggle menu">☰</button>
-                    <div class="title-icon">🎯</div>
-                    <span>NFC Media<span style="color: var(--primary);">Zone</span></span>
-                </div>
-                <div class="page-subtitle">Curated Media Collection - Direct Access Portal</div>
-            </div>
+        <!-- All Media Items Grid -->
+        <div class="items-grid">
+          <a href="21-songs.html" class="home-link">
+            <img src="assets/21%20SONGS%20home.png" alt="21 Songs" />
+          </a>
 
-            <!-- All Media Items Grid -->
-            <div class="items-grid">
-                <div class="home-link-group">
-                    <a href="index.html" class="home-link">
-                            <img src="assets/nfctags%20home.png" alt="NFCtag" class="nfctags-home">
-                        </a>
-                    <img src="assets/nfclogo.png" alt="NFC logo" class="nfclogo-small">
-                </div>
+          <a href="musical-score.html" class="home-link">
+            <img src="assets/MUSICAL%20SCORE%20home.png" alt="Musical Score" />
+          </a>
 
-                <a href="21-songs.html" class="home-link">
-                    <img src="assets/21%20SONGS%20home.png" alt="21 Songs">
-                </a>
+          <a href="kindle.html" class="home-link">
+            <img src="assets/KINDLE%20home.png" alt="Kindle" />
+          </a>
 
-                <a href="musical-score.html" class="home-link">
-                    <img src="assets/MUSICAL%20SCORE%20home.png" alt="Musical Score">
-                </a>
+          <a href="audiobook.html" class="home-link">
+            <img src="assets/audiobook%20home.png" alt="Audiobook" />
+          </a>
 
-                <a href="kindle.html" class="home-link">
-                    <img src="assets/KINDLE%20home.png" alt="Kindle">
-                </a>
+          <a href="font.html" class="home-link">
+            <img src="assets/FONT%20%28home%29.png" alt="Clochard Font" />
+          </a>
 
-                <a href="audiobook.html" class="home-link">
-                    <img src="assets/audiobook%20home.png" alt="Audiobook">
-                </a>
-
-                <a href="font.html" class="home-link">
-                    <img src="assets/FONT%20%28home%29.png" alt="Clochard Font">
-                </a>
-
-                <a href="plates.html" class="home-link">
-                    <img src="assets/PLATES%20home.png" alt="Plates">
-                </a>
-            </div>
+          <a href="plates.html" class="home-link">
+            <img src="assets/PLATES%20home.png" alt="Plates" />
+          </a>
         </div>
+      </div>
     </div>
 
     <script src="js/player.js"></script>
     <script>
-        // Hub navigation highlighting
-        document.querySelectorAll('.hub-item').forEach(item => {
-            const href = item.getAttribute('href');
-            if (window.location.pathname.includes(href) || (href === 'index.html' && window.location.pathname.endsWith('/'))) {
-                item.classList.add('active');
-            }
-        });
+      // Hub navigation highlighting
+      document.querySelectorAll(".hub-item").forEach((item) => {
+        const href = item.getAttribute("href");
+        if (
+          window.location.pathname.includes(href) ||
+          (href === "index.html" && window.location.pathname.endsWith("/"))
+        ) {
+          item.classList.add("active");
+        }
+      });
 
-        // Sidebar toggle
-        (function(){
-            const toggle = document.getElementById('sidebarToggle');
-            const overlay = document.getElementById('sidebarOverlay');
-            if (!toggle) return;
-            toggle.addEventListener('click', function(){
-                document.body.classList.toggle('sidebar-open');
-            });
-            if (overlay) overlay.addEventListener('click', function(){
-                document.body.classList.remove('sidebar-open');
-            });
-        })();
+      // Sidebar toggle
+      (function () {
+        const toggle = document.getElementById("sidebarToggle");
+        const overlay = document.getElementById("sidebarOverlay");
+        if (!toggle) return;
+        toggle.addEventListener("click", function () {
+          document.body.classList.toggle("sidebar-open");
+        });
+        if (overlay)
+          overlay.addEventListener("click", function () {
+            document.body.classList.remove("sidebar-open");
+          });
+      })();
     </script>
     <div id="sidebarOverlay" class="sidebar-overlay"></div>
-</body>
+  </body>
 </html>

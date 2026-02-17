@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Audiobook — English</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --overlay: rgba(235, 235, 235, 0.75);
+        --card: #e0e0e0;
+        --text: #111;
+      }
+      html,
+      body {
+        height: 100%;
+        font-family:
+          Inter,
+          system-ui,
+          -apple-system,
+          Arial,
+          sans-serif;
+        color: var(--text);
+      }
+      body {
+        background: url("assets/transparent%20bg.png") center/cover no-repeat
+          fixed;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 24px;
+      }
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: url("assets/transparent%20bg.png") center/cover no-repeat
+          fixed;
+        filter: blur(3px);
+        z-index: -1;
+        pointer-events: none;
+      }
+
+      .card {
+        width: 100%;
+        max-width: 520px;
+        background: var(--overlay);
+        padding: 18px;
+        border-radius: 4px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 12px;
+        position: relative;
+      }
+      /* .back-btn {
+        width: 36px;
+        height: 36px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        background: white;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        text-decoration: none;
+        color: var(--text);
+      } */
+      .back-btn img {
+        height: 40px;
+        width: auto;
+      }
+      .header-top {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 8px;
+      }
+      .flag {
+        height: 40px;
+        width: auto;
+        position: relative;
+        left: 8%;
+        top: -25px;
+      }
+      .brand img {
+        height: 52px;
+        width: 100%;
+        display: block;
+        margin-bottom: 10px;
+        z-index: 2;
+      }
+    
+      .nfc-group {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 8px;
+      }
+      .nfc {
+        width: 48px;
+        height: 48px;
+        display: block;
+      }
+
+      .english-label {
+        height: 40px;
+        width: auto;
+        display: block;
+        margin: 0 auto;
+        margin-bottom: 25px;
+      }
+      .list {
+        margin-top: 12px;
+      }
+      .book-row {
+        margin-bottom: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border-radius: 4px;
+        padding: 8px;
+      }
+      .book-row:hover {
+        background: rgba(255, 255, 255, 0.5);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+      .thumbs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+      .thumb {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 2px;
+        flex: 0 0 60px;
+      }
+      .cap {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      .book-row {
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border-radius: 2px;
+      }
+
+      .book-row:hover {
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        filter: brightness(1.05);
+      }
+
+      @media (max-width: 420px) {
+        .card {
+          padding: 14px;
+        }
+       
+        .back-btn img {
+          height: 40px;
+        }
+        .flag {
+          height: 40px;
+          left: 10%;
+          top: -23px;
+        }
+        .brand img {
+          height: 44px;
+        }
+        .english-label {
+          height: 30px;
+        }
+        .nfc {
+          width: 42px;
+          height: 42px;
+        }
+        .thumb {
+          width: 48px;
+          height: 48px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="header">
+        <div class="header-top">
+          <img
+            class="flag"
+            src="assets/audiobookenglishimages/FLAG%20ING.png"
+            alt="English Flag"
+          />
+          <div class="brand">
+            <img
+              src="assets/audiobookenglishimages/audiobook logo.png"
+              alt="AUDIObook"
+            />
+          </div>
+        </div>
+        <img class="english-label" src="assets/audiobookenglishimages/SOTTOTITOLO ING.png" alt="English" />
+        <div class="nfc-group">
+          <a class="back-btn" href="audiobook.html">
+            <img src="assets/back arrow.png" alt="Back" />
+          </a>
+          <img class="nfc" src="assets/nfclogo.png" alt="NFC" />
+        </div>
+      </div>
+
+      <div class="list">
+        <div class="book-row">
+          <img class="cap" src="assets/audiobookenglishimages/01.png" />
+        </div>
+        <div class="book-row">
+          <img class="cap" src="assets/audiobookenglishimages/02.png" />
+        </div>
+        <div class="book-row">
+          <img class="cap" src="assets/audiobookenglishimages/CAP 1.png" />
+        </div>
+        <div class="book-row">
+          <img class="cap" src="assets/audiobookenglishimages/CAP 2.png" />
+        </div>
+        <div class="book-row">
+          <img class="cap" src="assets/audiobookenglishimages/CAP 3.png" />
+        </div>
+        <div class="book-row">
+          <img class="cap" src="assets/audiobookenglishimages/CAP 4.png" />
+        </div>
+        <div class="book-row">
+          <img class="cap" src="assets/audiobookenglishimages/CAP 5.png" />
+        </div>
+        <div class="book-row">
+          <img class="cap" src="assets/audiobookenglishimages/CAP 6.png" />
+        </div>
+        <div class="book-row">
+          <img class="cap" src="assets/audiobookenglishimages/CAP 6.1.png" />
+        </div>
+        <div class="book-row">
+          <img class="cap" src="assets/audiobookenglishimages/CAP 7.png" />
+        </div>
+        <div class="book-row">
+          <img class="cap" src="assets/audiobookenglishimages/CAP 7.1.png" />
+        </div>
+        <div class="book-row">
+          <img class="cap" src="assets/audiobookenglishimages/CAP 8.png" />
+        </div>
+        <div class="book-row">
+          <img class="cap" src="assets/audiobookenglishimages/CAP 8.1.png" />
+        </div>
+        <div class="book-row">
+          <img class="cap" src="assets/audiobookenglishimages/CAP 8.2.png" />
+        </div>
+        <div class="book-row">
+          <img class="cap" src="assets/audiobookenglishimages/CAP 8.3.png" />
+        </div>
+        <div class="book-row">
+          <img class="cap" src="assets/audiobookenglishimages/CAP 8.4.png" />
+        </div>
+        <div class="book-row">
+          <img class="cap" src="assets/audiobookenglishimages/CAP 9.png" />
+        </div>
+        <div class="book-row">
+          <img class="cap" src="assets/audiobookenglishimages/CAP 9.1.png" />
+        </div>
+        <div class="book-row">
+          <img class="cap" src="assets/audiobookenglishimages/CAP 10.png" />
+        </div>
+        <div class="book-row">
+          <img class="cap" src="assets/audiobookenglishimages/CAP 11.png" />
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Make book rows clickable and navigate to chapter player
+      const rows = document.querySelectorAll('.book-row');
+      rows.forEach((row, index) => {
+        row.style.cursor = 'pointer';
+        row.addEventListener('click', () => {
+          const chapNum = index + 1;
+          window.location.href = `audiobook-chapter-player.html?ch=${chapNum}`;
+        });
+      });
+    </script>
+  </body>
+</html>
