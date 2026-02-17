@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/shared.css">
     <style>
         body {
-            background: white;
+            background: url('assets/transparent%20bg.png') center/cover no-repeat fixed;
         }
 
         .hub-wrapper {
@@ -15,6 +15,7 @@
             grid-template-columns: 250px 1fr;
             gap: 0;
             min-height: 100vh;
+            position: relative;
         }
 
         /* Left Sidebar - NFC Hub */
@@ -24,6 +25,14 @@
             padding: 40px 0;
             display: flex;
             flex-direction: column;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 250px;
+            transform: translateX(-110%);
+            transition: transform 0.28s ease;
+            z-index: 60;
         }
 
         .sidebar-header {
@@ -94,6 +103,27 @@
         /* Main Content */
         .main-content {
             padding: 40px;
+            transition: margin-left 0.28s ease;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* sidebar open state on body */
+        body.sidebar-open .sidebar {
+            transform: translateX(0);
+        }
+
+        /* overlay appears when sidebar is open */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.35);
+            z-index: 50;
+        }
+
+        body.sidebar-open .sidebar-overlay {
+            display: block;
         }
 
         .header-section {
@@ -108,6 +138,20 @@
             display: flex;
             align-items: center;
             gap: 16px;
+        }
+
+        .sidebar-toggle {
+            width: 44px;
+            height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            background: white;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            margin-right: 8px;
+            font-size: 18px;
         }
 
         .title-icon {
@@ -130,9 +174,82 @@
         }
 
         .items-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            max-width: 520px;
+            margin: 0 auto;
+            padding: 6px 10px 40px;
+        }
+
+        .home-link img {
+            width: 100%;
+            display: block;
+            border-radius: 2px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        /* Specific sizing for the large NFC tag hero image */
+        .nfctags-home {
+            display: block;
+            width: 90%;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .home-link {
+            display: block;
+            text-decoration: none;
+        }
+
+        .home-link-group {
+            text-align: center;
+        }
+
+        .nfclogo-small {
+            width: 48px;
+            margin: 8px auto 0;
+            display: block;
+        }
+
+        @media (min-width: 1200px) {
+            .items-grid {
+                max-width: none;
+                margin: 0 auto;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 28px;
+                padding: 20px 40px;
+            }
+
+            /* Keep other home cards a consistent width, center them */
+            .home-link img {
+                width: 320px;
+            }
+
+            /* Make the nfctags hero smaller on wide screens */
+            .nfctags-home {
+                width: 280px;
+                max-width: 280px;
+            }
+
+            /* Ensure links behave as fixed-size cards */
+            .home-link {
+                flex: 0 0 auto;
+                max-width: 320px;
+            }
+
+            /* Make the NFC group behave like other cards so the grid wraps */
+            .home-link-group {
+                flex: 0 0 auto;
+                max-width: 320px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
         }
 
         .media-card {
@@ -467,6 +584,7 @@
         <div class="main-content">
             <div class="header-section">
                 <div class="page-title">
+                    <button id="sidebarToggle" class="sidebar-toggle" aria-label="Toggle menu">☰</button>
                     <div class="title-icon">🎯</div>
                     <span>NFC Media<span style="color: var(--primary);">Zone</span></span>
                 </div>
@@ -475,138 +593,36 @@
 
             <!-- All Media Items Grid -->
             <div class="items-grid">
-                <!-- 21 Songs -->
-                <div class="media-card">
-                    <div class="card-header">
-                        <div class="card-icon">♪</div>
-                        <div>
-                            <div class="card-title">21 <span class="light">SONGS</span></div>
-                            <div class="card-subtitle">Complete Album • MP3 + Karaoke</div>
-                        </div>
-                    </div>
-                    <div class="card-image">♫</div>
-                    <div class="card-description">
-                        21 curated tracks with advanced collaborations and reimagined arrangements. Full production quality in both standard and karaoke versions.
-                    </div>
-                    <div class="card-tags">
-                        <span class="tag">MP3</span>
-                        <span class="tag">KARAOKE</span>
-                    </div>
-                    <div class="card-actions">
-                        <a href="21-songs.html" class="action-btn primary">Open Player</a>
-                    </div>
+                <div class="home-link-group">
+                    <a href="index.html" class="home-link">
+                            <img src="assets/nfctags%20home.png" alt="NFCtag" class="nfctags-home">
+                        </a>
+                    <img src="assets/nfclogo.png" alt="NFC logo" class="nfclogo-small">
                 </div>
 
-                <!-- Musical Score -->
-                <div class="media-card">
-                    <div class="card-header">
-                        <div class="card-icon">♫</div>
-                        <div>
-                            <div class="card-title">musical<span class="light">SCORE</span></div>
-                            <div class="card-subtitle">Orchestral • PDF</div>
-                        </div>
-                    </div>
-                    <div class="card-image">🎼</div>
-                    <div class="card-description">
-                        Professional orchestral arrangements showcasing conductor artistry and ensemble performances. High-quality scores ready for performance.
-                    </div>
-                    <div class="card-tags">
-                        <span class="tag">SCORE</span>
-                        <span class="tag">PDF</span>
-                    </div>
-                    <div class="card-actions">
-                        <a href="musical-score.html" class="action-btn primary">View Scores</a>
-                    </div>
-                </div>
+                <a href="21-songs.html" class="home-link">
+                    <img src="assets/21%20SONGS%20home.png" alt="21 Songs">
+                </a>
 
-                <!-- Audiobook -->
-                <div class="media-card">
-                    <div class="card-header">
-                        <div class="card-icon">🎧</div>
-                        <div>
-                            <div class="card-title">AUDIO<span class="light">book</span></div>
-                            <div class="card-subtitle">Multi-language • Narrated</div>
-                        </div>
-                    </div>
-                    <div class="card-image">📚</div>
-                    <div class="card-description">
-                        Professionally narrated in English, Italian, and Polish. Premium audio quality with chapter-based navigation for seamless listening.
-                    </div>
-                    <div class="card-tags">
-                        <span class="tag">ENGLISH</span>
-                        <span class="tag">ITALIAN</span>
-                    </div>
-                    <div class="card-actions">
-                        <a href="audiobook.html" class="action-btn primary">Play Audiobook</a>
-                    </div>
-                </div>
+                <a href="musical-score.html" class="home-link">
+                    <img src="assets/MUSICAL%20SCORE%20home.png" alt="Musical Score">
+                </a>
 
-                <!-- Kindle -->
-                <div class="media-card">
-                    <div class="card-header">
-                        <div class="card-icon">📖</div>
-                        <div>
-                            <div class="card-title">KINDLE<span class="light">lite</span></div>
-                            <div class="card-subtitle">DRM-Free • eBook</div>
-                        </div>
-                    </div>
-                    <div class="card-image">📕</div>
-                    <div class="card-description">
-                        Lightweight digital edition optimized for all reading devices. Enhanced typography, responsive design, and full DRM-free freedom.
-                    </div>
-                    <div class="card-tags">
-                        <span class="tag">EBOOK</span>
-                        <span class="tag">DRM-FREE</span>
-                    </div>
-                    <div class="card-actions">
-                        <a href="kindle.html" class="action-btn primary">Read</a>
-                    </div>
-                </div>
+                <a href="kindle.html" class="home-link">
+                    <img src="assets/KINDLE%20home.png" alt="Kindle">
+                </a>
 
-                <!-- Clochard Font -->
-                <div class="media-card">
-                    <div class="card-header">
-                        <div class="card-icon">Aa</div>
-                        <div>
-                            <div class="card-title">CLOCHARD<span class="light">FONT</span></div>
-                            <div class="card-subtitle">Custom Typeface • Editorial</div>
-                        </div>
-                    </div>
-                    <div class="card-image">🔤</div>
-                    <div class="card-description">
-                        Custom typeface designed for editorial and display typography. Distinctive character across all weights with extensive glyphs.
-                    </div>
-                    <div class="card-tags">
-                        <span class="tag">TTF</span>
-                        <span class="tag">OTF</span>
-                        <span class="tag">VARIABLE</span>
-                    </div>
-                    <div class="card-actions">
-                        <a href="font.html" class="action-btn primary">Font Details</a>
-                    </div>
-                </div>
+                <a href="audiobook.html" class="home-link">
+                    <img src="assets/audiobook%20home.png" alt="Audiobook">
+                </a>
 
-                <!-- Plates Clocharism -->
-                <div class="media-card">
-                    <div class="card-header">
-                        <div class="card-icon">📷</div>
-                        <div>
-                            <div class="card-title">PLATES<span class="light">clocharism</span></div>
-                            <div class="card-subtitle">Photography • Archive</div>
-                        </div>
-                    </div>
-                    <div class="card-image">🖼</div>
-                    <div class="card-description">
-                        Visual documentation and archival collection of contemporary artistic vision. High-resolution photographs from multiple curated collections.
-                    </div>
-                    <div class="card-tags">
-                        <span class="tag">ARCHIVE</span>
-                        <span class="tag">HIGH-RES</span>
-                    </div>
-                    <div class="card-actions">
-                        <a href="plates.html" class="action-btn primary">Gallery</a>
-                    </div>
-                </div>
+                <a href="font.html" class="home-link">
+                    <img src="assets/FONT%20%28home%29.png" alt="Clochard Font">
+                </a>
+
+                <a href="plates.html" class="home-link">
+                    <img src="assets/PLATES%20home.png" alt="Plates">
+                </a>
             </div>
         </div>
     </div>
@@ -620,6 +636,20 @@
                 item.classList.add('active');
             }
         });
+
+        // Sidebar toggle
+        (function(){
+            const toggle = document.getElementById('sidebarToggle');
+            const overlay = document.getElementById('sidebarOverlay');
+            if (!toggle) return;
+            toggle.addEventListener('click', function(){
+                document.body.classList.toggle('sidebar-open');
+            });
+            if (overlay) overlay.addEventListener('click', function(){
+                document.body.classList.remove('sidebar-open');
+            });
+        })();
     </script>
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
 </body>
 </html>
