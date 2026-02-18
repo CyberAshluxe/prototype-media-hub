@@ -95,7 +95,7 @@ button {
 .card {
     border: 2px solid var(--primary);
     padding: 20px;
-    background: white;
+    background: rgba(220,220,220,0.65);
 }
 
 .card-header {
