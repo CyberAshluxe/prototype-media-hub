@@ -26,33 +26,31 @@
           sans-serif;
         color: var(--text);
       }
+
       body {
-        background: url("assets/transparent%20bg.png") center/cover no-repeat
-          fixed;
+        background: rgb(200, 195, 195);
         display: flex;
         align-items: flex-start;
         justify-content: center;
         padding: 24px;
       }
       body::after {
-        content: "";
-        position: fixed;
-        inset: 0;
-        background: url("assets/transparent%20bg.png") center/cover no-repeat
-          fixed;
-        filter: blur(3px);
-        z-index: -1;
-        pointer-events: none;
+        display: none;
       }
 
       .card {
         width: 100%;
         max-width: 520px;
-        background: var(--overlay);
+        background: rgba(235,235,235,0.55);
         padding: 18px;
         border-radius: 4px;
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        background-image: url("assets/transparent%20bg.png");
+        background-size: cover;
+        background-position: center;
       }
+
+  
       .header {
         text-align: center;
         margin-bottom: 12px;

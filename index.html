@@ -20,7 +20,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: url("assets/transparent%20bg.png") center/cover no-repeat fixed;
+        background: url("assets/base.png") center/cover no-repeat fixed;
         filter: blur(2px);
         z-index: -1;
       }
@@ -33,111 +33,10 @@
         position: relative;
       }
 
-      /* Left Sidebar - NFC Hub */
-      .sidebar {
-        background: white;
-        border-right: 2px solid var(--primary);
-        padding: 40px 0;
-        display: flex;
-        flex-direction: column;
-        position: fixed;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 250px;
-        transform: translateX(-110%);
-        transition: transform 0.28s ease;
-        z-index: 60;
-      }
-
-      .sidebar-header {
-        padding: 0 20px 30px;
-        border-bottom: 1px solid var(--border);
-        margin-bottom: 30px;
-      }
-
-      .hub-logo {
-        font-size: 24px;
-        font-weight: 700;
-        letter-spacing: 2px;
-        margin-bottom: 8px;
-      }
-
-      .hub-subtitle {
-        font-size: 11px;
-        color: var(--gray);
-        letter-spacing: 1px;
-        text-transform: uppercase;
-      }
-
-      .hub-nav {
-        display: flex;
-        flex-direction: column;
-        gap: 0;
-        flex: 1;
-      }
-
-      .hub-item {
-        padding: 16px 20px;
-        border-bottom: 1px solid var(--border);
-        cursor: pointer;
-        transition: all 0.2s ease;
-        text-decoration: none;
-        color: var(--dark);
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-size: 13px;
-        font-weight: 500;
-        letter-spacing: 0.5px;
-      }
-
-      .hub-item:hover {
-        background: var(--light);
-        color: var(--primary);
-        padding-left: 24px;
-      }
-
-      .hub-item.active {
-        background: var(--primary);
-        color: white;
-        border-left: 4px solid var(--primary);
-        padding-left: 16px;
-      }
-
-      .hub-icon {
-        width: 24px;
-        height: 24px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        font-size: 14px;
-      }
-
-      /* Main Content */
+      /* Sidebar removed -- main layout simplified */
       .main-content {
         padding: 40px 20px;
-        transition: margin-left 0.28s ease;
         width: 100%;
-      }
-
-      /* sidebar open state on body */
-      body.sidebar-open .sidebar {
-        transform: translateX(0);
-      }
-
-      /* overlay appears when sidebar is open */
-      .sidebar-overlay {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.35);
-        z-index: 50;
-      }
-
-      body.sidebar-open .sidebar-overlay {
-        display: block;
       }
 
       .header-section {
@@ -182,19 +81,7 @@
         transform: scale(1.08) rotate(10deg);
       }
 
-      .sidebar-toggle {
-        width: 44px;
-        height: 44px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 6px;
-        background: white;
-        border: 1px solid var(--border);
-        cursor: pointer;
-        margin-right: 8px;
-        font-size: 18px;
-      }
+      /* sidebar toggle removed */
 
       .title-icon {
         width: 48px;
@@ -582,58 +469,11 @@
     </style>
   </head>
   <body>
-    <div class="hub-wrapper">
-      <!-- Left Sidebar Navigation -->
-      <div class="sidebar">
-        <div class="sidebar-header">
-          <div class="hub-logo">
-            NFC<span style="color: var(--primary)">bag</span>
-          </div>
-          <div class="hub-subtitle">Media Hub</div>
-        </div>
-        <nav class="hub-nav">
-          <a href="index.html" class="hub-item active">
-            <div class="hub-icon">🏠</div>
-            <span>Hub Overview</span>
-          </a>
-          <a href="21-songs.html" class="hub-item">
-            <div class="hub-icon">♪</div>
-            <span>21 Songs</span>
-          </a>
-          <a href="musical-score.html" class="hub-item">
-            <div class="hub-icon">♫</div>
-            <span>Musical Score</span>
-          </a>
-          <a href="audiobook.html" class="hub-item">
-            <div class="hub-icon">🎧</div>
-            <span>Audiobook</span>
-          </a>
-          <a href="kindle.html" class="hub-item">
-            <div class="hub-icon">📖</div>
-            <span>Kindle</span>
-          </a>
-          <a href="font.html" class="hub-item">
-            <div class="hub-icon">Aa</div>
-            <span>Clochard Font</span>
-          </a>
-          <a href="plates.html" class="hub-item">
-            <div class="hub-icon">📷</div>
-            <span>Plates</span>
-          </a>
-        </nav>
-      </div>
-
+      <div class="hub-wrapper">
       <!-- Main Content Area -->
       <div class="main-content">
         <div class="header-section">
           <div class="page-title">
-            <button
-              id="sidebarToggle"
-              class="sidebar-toggle"
-              aria-label="Toggle menu"
-            >
-              ☰
-            </button>
             <div class="logo-group">
               <img src="assets/nfctags%20home.png" alt="NFC Tags" />
               <img src="assets/nfclogo.png" alt="NFC Logo" style="height: 40px;" />
@@ -646,7 +486,7 @@
 
         <!-- All Media Items Grid -->
         <div class="items-grid">
-          <a href="21-songs.html" class="home-link">
+          <a href="21songs.html" class="home-link">
             <img src="assets/21%20SONGS%20home.png" alt="21 Songs" />
           </a>
 
@@ -686,20 +526,6 @@
         }
       });
 
-      // Sidebar toggle
-      (function () {
-        const toggle = document.getElementById("sidebarToggle");
-        const overlay = document.getElementById("sidebarOverlay");
-        if (!toggle) return;
-        toggle.addEventListener("click", function () {
-          document.body.classList.toggle("sidebar-open");
-        });
-        if (overlay)
-          overlay.addEventListener("click", function () {
-            document.body.classList.remove("sidebar-open");
-          });
-      })();
     </script>
-    <div id="sidebarOverlay" class="sidebar-overlay"></div>
   </body>
 </html>

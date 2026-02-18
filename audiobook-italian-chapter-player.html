@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Chapter Player</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--overlay:rgba(235,235,235,0.75);--text:#111;--border:#ddd}
+    html,body{height:100%;font-family:Inter, system-ui, -apple-system, Arial, sans-serif;color:var(--text)}
+    body{background:url("assets/transparent%20bg.png") center/cover no-repeat fixed;display:flex;align-items:flex-start;justify-content:center;padding:20px}
+    body::after{content:"";position:fixed;inset:0;background:url("assets/transparent%20bg.png") center/cover no-repeat fixed;filter:blur(3px);z-index:-1;pointer-events:none}
+
+    .container{width:100%;max-width:480px;background:var(--overlay);padding:16px;border-radius:4px;box-shadow:0 8px 24px rgba(0,0,0,0.12)}
+    
+    .header{text-align:center;margin-bottom:12px;position:relative}
+    .header-top{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:8px}
+    .flag{height:40px;width:auto;position:relative;left:8%;top:-25px}
+    .brand img{height:52px;width:100%;display:block;margin-bottom:10px;z-index:2}
+    .english-label{height:40px;width:auto;display:block;margin:0 auto;margin-bottom:25px}
+    .nfc-group{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:8px}
+    .back-btn img{height:40px;width:auto}
+    .nfc{width:48px;height:48px;display:block}
+    
+    .chapter-header{text-align:center;margin-bottom:16px;padding:12px 0;border-bottom:1px solid var(--border)}
+    .chapter-title{font-size:18px;font-weight:700;margin-bottom:6px;letter-spacing:1px}
+    .chapter-subtitle{font-size:13px;color:#666;text-transform:uppercase;letter-spacing:0.5px}
+    
+    .art-container{margin:16px 0;text-align:center}
+    .art-image{max-width:100%;height:auto;max-height:320px;object-fit:contain;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,0.12)}
+    
+    .player-section{margin:16px 0;padding:16px;background:white;border-radius:4px}
+    .progress-bar{width:100%;height:6px;background:#ddd;border-radius:3px;margin:12px 0;overflow:hidden}
+    .progress-fill{height:100%;background:#333;width:0%;transition:width 0.1s linear}
+    .progress-labels{display:flex;justify-content:space-between;font-size:11px;color:#666;margin-bottom:8px}
+    
+    .controls{display:flex;align-items:center;justify-content:center;gap:16px;margin:14px 0}
+    .control-btn{width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;cursor:pointer;font-size:24px;opacity:0.7;transition:opacity 0.2s}
+    .control-btn:hover{opacity:1}
+    .play-btn{width:56px;height:56px;background:#333;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:28px;cursor:pointer;transition:all 0.3s}
+    .play-btn:hover{background:#555;transform:scale(1.05)}
+    
+    .footer{text-align:center;font-size:10px;color:#999;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+    
+    @media (max-width:420px){
+      .container{padding:14px}
+      .flag{height:40px;left:10%;top:-23px}
+      .brand img{height:44px}
+      .english-label{height:30px;margin-bottom:15px}
+      .nfc{width:42px;height:42px}
+      .back-btn img{height:32px}
+      .art-image{max-height:240px}
+      .control-btn{width:36px;font-size:20px}
+      .play-btn{width:48px;height:48px;font-size:24px}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-top">
+        <img class="flag" src="assets/audiobookItanlianImage/FLAG ITA.png" alt="English Flag" />
+        <div class="brand">
+          <img src="assets/audiobookenglishimages/audiobook logo.png" alt="AUDIObook" />
+        </div>
+      </div>
+      <img class="english-label" src="assets/audiobookItanlianImage/SOTTOTITOLO ITA.png" alt="English" />
+      <div class="nfc-group">
+        <a class="back-btn" href="audiobook-italian.html">
+          <img src="assets/back%20arrow.png" alt="Back" />
+        </a>
+        <img class="nfc" src="assets/nfclogo.png" alt="NFC" />
+      </div>
+    </div>
+
+    <div class="chapter-header">
+      <div class="chapter-title" id="chapTitle"></div>
+      <div class="chapter-subtitle" id="chapSubtitle"></div>
+    </div>
+
+    <div class="art-container">
+      <img class="art-image" id="artImage" src="" alt="Chapter Art" />
+    </div>
+
+    <div class="player-section">
+      <audio id="audioPlayer" crossorigin="anonymous"></audio>
+      <div class="progress-labels">
+        <span id="currentTime">0:00</span>
+        <span id="totalTime">0:00</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      
+      <div class="controls">
+        <div class="control-btn" title="shuffle">⤺</div>
+                                <div class="control-btn" title="prev">◀◀</div>
+                                <div class="control-btn play" title="play">▶</div>
+                                <div class="control-btn" title="next">▶▶</div>
+                                <div class="control-btn" title="repeat">⟳</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      All Rights Reserved © 2026
+    </div>
+  </div>
+
+  <script>
+    const audio = document.getElementById('audioPlayer');
+    const playBtn = document.getElementById('playBtn');
+    const progressFill = document.getElementById('progressFill');
+    const currentTimeEl = document.getElementById('currentTime');
+    const totalTimeEl = document.getElementById('totalTime');
+    const chapTitle = document.getElementById('chapTitle');
+    const artImage = document.getElementById('artImage');
+
+    const chapters = {
+      1: { title: '01 - Clochard Worls Project', subtitle: 'IL CLOCHARISMO', file: '01 - Clochard Worls Project (1).mp3', image: 'image1.png' },
+      2: { title: '02 - Prefazione', subtitle: 'INTRODUZIONE', file: '02 - Prefazione.mp3', image: '02.png' },
+      3: { title: 'CAPITOLO 1', subtitle: '', file: 'CAP 1.mp3', image: 'CAP 1.png' },
+      4: { title: 'CAPITOLO 2', subtitle: '', file: 'CAP 2.mp3', image: 'CAP 2.png' },
+      5: { title: 'CAPITOLO 3', subtitle: '', file: 'CAP 3.mp3', image: 'CAP 3.png' },
+      6: { title: 'CAPITOLO 4', subtitle: '', file: 'CAP 4.mp3', image: 'CAP 4.png' },
+      7: { title: 'CAPITOLO 5', subtitle: '', file: 'CAP 5.mp3', image: 'CAP 5.png' },
+      8: { title: 'CAPITOLO 6', subtitle: '', file: 'CAP 6.mp3', image: 'CAP 6.png' },
+      9: { title: 'CAPITOLO 7', subtitle: '', file: 'CAP 7.mp3', image: 'CAP 7.png' },
+      10: { title: 'CAPITOLO 8', subtitle: '', file: 'CAP 8.mp3', image: 'CAP 8.png' },
+      11: { title: 'CAPITOLO 9', subtitle: '', file: 'CAP 9.mp3', image: 'CAP 9.png' }
+    };
+
+    function getChapterParam() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('ch') || '1';
+    }
+
+    function formatTime(seconds) {
+      if (!isFinite(seconds)) return '0:00';
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+
+    function loadChapter() {
+      const ch = getChapterParam();
+      const chapter = chapters[ch];
+      if (chapter) {
+        chapTitle.textContent = chapter.title || '';
+        const chapSubtitle = document.getElementById('chapSubtitle');
+        chapSubtitle.textContent = chapter.subtitle || '';
+        artImage.src = `assets/audiobookItanlianImage/${chapter.image}`;
+        if (chapter.file && chapter.file.trim() !== '') {
+          audio.src = encodeURI(`audiobookMusic/audiobookItalian/${chapter.file}`);
+          audio.load();
+        } else {
+          audio.removeAttribute('src');
+          playBtn.textContent = '▶';
+          progressFill.style.width = '0%';
+          currentTimeEl.textContent = '0:00';
+          totalTimeEl.textContent = '0:00';
+        }
+      }
+    }
+
+    playBtn.addEventListener('click', () => {
+      if (!audio.src) return;
+      if (audio.paused) {
+        audio.play().catch(() => {});
+        playBtn.textContent = '⏸';
+      } else {
+        audio.pause();
+        playBtn.textContent = '▶';
+      }
+    });
+
+    audio.addEventListener('timeupdate', () => {
+      const percent = (audio.currentTime / audio.duration) * 100 || 0;
+      progressFill.style.width = percent + '%';
+      currentTimeEl.textContent = formatTime(audio.currentTime);
+    });
+
+    audio.addEventListener('loadedmetadata', () => {
+      totalTimeEl.textContent = formatTime(audio.duration);
+    });
+
+    progressFill.parentElement.addEventListener('click', (e) => {
+      const rect = progressFill.parentElement.getBoundingClientRect();
+      const percent = (e.clientX - rect.left) / rect.width;
+      audio.currentTime = percent * audio.duration;
+    });
+
+    loadChapter();
+  </script>
+</body>
+</html>

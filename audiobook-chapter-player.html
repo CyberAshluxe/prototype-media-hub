@@ -93,11 +93,11 @@
       </div>
       
       <div class="controls">
-        <button class="control-btn">⏮</button>
-        <button class="control-btn">⏪</button>
-        <button class="play-btn" id="playBtn">▶</button>
-        <button class="control-btn">⏩</button>
-        <button class="control-btn">🔄</button>
+        <div class="control-btn" title="shuffle">⤺</div>
+                                <div class="control-btn" title="prev">◀◀</div>
+                                <div class="control-btn play" title="play">▶</div>
+                                <div class="control-btn" title="next">▶▶</div>
+                                <div class="control-btn" title="repeat">⟳</div>
       </div>
     </div>
 
@@ -116,17 +116,17 @@
     const artImage = document.getElementById('artImage');
 
     const chapters = {
-      1: { title: 'I FIRST NOTES', file: 'I%20-%20First%20notes.mp3', image: 'I%20first%20note.png' },
-      2: { title: 'CHAPTER 2', file: 'chapter-2.mp3', image: 'CAP%202.png' },
-      3: {  title: 'I FIRST NOTES', file: 'I%20-%20First%20notes.mp3', image: 'I%20first%20note.png' },
-      4: { title: 'CHAPTER 4', file: 'chapter-4.mp3', image: 'CAP%204.png' },
-      5: { title: 'CHAPTER 5', file: 'chapter-5.mp3', image: 'CAP%205.png' },
-      6: { title: 'CHAPTER 6', file: 'chapter-6.mp3', image: 'CAP%206.png' },
-      7: { title: 'CHAPTER 7', file: 'chapter-7.mp3', image: 'CAP%207.png' },
-      8: { title: 'CHAPTER 8', file: 'chapter-8.mp3', image: 'CAP%208.png' },
-      9: { title: 'CHAPTER 9', file: 'chapter-9.mp3', image: 'CAP%209.png' },
-      10: { title: 'CHAPTER 10', file: 'chapter-10.mp3', image: 'CAP%2010.png' },
-      11: { title: 'CHAPTER 11', file: 'chapter-11.mp3', image: 'CAP%2011.png' }
+      1: { title: 'Clochard Worls Project', file: '01 - Clochard Worls Project.mp3', image: 'I%20first%20note.png' },
+      2: { title: 'Preface', file: '02 - Preface.mp3', image: 'I%20first%20note.png' },
+      3: { title: 'I - First notes', file: 'I - First notes.mp3', image: 'I%20first%20note.png' },
+      4: { title: 'II - A photograph that contains a treasure', file: 'II - A photograph that contains a treasure.mp3', image: 'a photograph that contains.png' },
+      5: { title: 'CHAPTER 5', file: '', image: 'CAP%205.png' },
+      6: { title: 'CHAPTER 6', file: '', image: 'CAP%206.png' },
+      7: { title: 'CHAPTER 7', file: '', image: 'CAP%207.png' },
+      8: { title: 'CHAPTER 8', file: '', image: 'CAP%208.png' },
+      9: { title: 'CHAPTER 9', file: '', image: 'CAP%209.png' },
+      10: { title: 'CHAPTER 10', file: '', image: 'CAP%2010.png' },
+      11: { title: 'CHAPTER 11', file: '', image: 'CAP%2011.png' }
     };
 
     function getChapterParam() {
@@ -147,13 +147,23 @@
       if (chapter) {
         chapTitle.textContent = chapter.title;
         artImage.src = `assets/audiobookenglishimages/${chapter.image}`;
-        audio.src = `audiobookMusic/${chapter.file}`;
+        if (chapter.file && chapter.file.trim() !== '') {
+          audio.src = encodeURI(`audiobookMusic/${chapter.file}`);
+          audio.load();
+        } else {
+          audio.removeAttribute('src');
+          playBtn.textContent = '▶';
+          progressFill.style.width = '0%';
+          currentTimeEl.textContent = '0:00';
+          totalTimeEl.textContent = '0:00';
+        }
       }
     }
 
     playBtn.addEventListener('click', () => {
+      if (!audio.src) return;
       if (audio.paused) {
-        audio.play();
+        audio.play().catch(() => {});
         playBtn.textContent = '⏸';
       } else {
         audio.pause();
