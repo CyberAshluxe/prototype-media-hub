@@ -117,10 +117,10 @@
     const artImage = document.getElementById('artImage');
 
     const chapters = {
-      1: { title: 'Clochard Worls Project', file: '01 - Clochard Worls Project.mp3', image: 'I%20first%20note.png' },
-      2: { title: 'Preface', file: '02 - Preface.mp3', image: 'I%20first%20note.png' },
-      3: { title: 'I - First notes', file: 'I - First notes.mp3', image: 'I%20first%20note.png' },
-      4: { title: 'II - A photograph that contains a treasure', file: 'II - A photograph that contains a treasure.mp3', image: 'a photograph that contains.png' },
+      1: { title: 'Clochard Worls Project', file: 'https://mvwuicthgtdzsiieeqck.supabase.co/storage/v1/object/sign/OHI%20SECRET%20PAGE/01%20-%20Clochard%20Worls%20Project.mp3?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kMzNjZTU0Ni1mNWJkLTRmMTktOGNiYi01MjU2NjlmM2E1NzkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJPSEkgU0VDUkVUIFBBR0UvMDEgLSBDbG9jaGFyZCBXb3JscyBQcm9qZWN0Lm1wMyIsImlhdCI6MTc3MTU1NTEzNCwiZXhwIjoyMDg2OTE1MTM0fQ.6-KXlWc1AnICFft4Y1W8anahKWeniiEEkt9SsKv3xBs', image: 'I%20first%20note.png' },
+      2: { title: 'Preface', file: 'https://mvwuicthgtdzsiieeqck.supabase.co/storage/v1/object/sign/OHI%20SECRET%20PAGE/02%20-%20Preface.mp3?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kMzNjZTU0Ni1mNWJkLTRmMTktOGNiYi01MjU2NjlmM2E1NzkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJPSEkgU0VDUkVUIFBBR0UvMDIgLSBQcmVmYWNlLm1wMyIsImlhdCI6MTc3MTU1NTI1NywiZXhwIjoyMDg2OTE1MjU3fQ.jwX0vFzsgz6bQKZRegWrmlmMfmBtXr0R_jSNqF8yk14', image: 'I%20first%20note.png' },
+      3: { title: 'I - First notes', file: 'https://mvwuicthgtdzsiieeqck.supabase.co/storage/v1/object/sign/OHI%20SECRET%20PAGE/I%20-%20First%20notes.mp3?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kMzNjZTU0Ni1mNWJkLTRmMTktOGNiYi01MjU2NjlmM2E1NzkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJPSEkgU0VDUkVUIFBBR0UvSSAtIEZpcnN0IG5vdGVzLm1wMyIsImlhdCI6MTc3MTU1NDU2OCwiZXhwIjoyMDg2OTE0NTY4fQ.f3-450c6FrjCky2AcZfCvGWwBQJC9MRi2tGtDccLlaM', image: 'I%20first%20note.png' },
+      4: { title: 'II - A photograph that contains a treasure', file: 'https://mvwuicthgtdzsiieeqck.supabase.co/storage/v1/object/sign/OHI%20SECRET%20PAGE/II%20-%20A%20photograph%20that%20contains%20a%20treasure.mp3?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kMzNjZTU0Ni1mNWJkLTRmMTktOGNiYi01MjU2NjlmM2E1NzkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJPSEkgU0VDUkVUIFBBR0UvSUkgLSBBIHBob3RvZ3JhcGggdGhhdCBjb250YWlucyBhIHRyZWFzdXJlLm1wMyIsImlhdCI6MTc3MTU1NTMwNiwiZXhwIjoyMDg2OTE1MzA2fQ.nDXXNK5sWheJcfTgRlMFLM0hLdEqv-DRDYSI4LlRaZI', image: 'a photograph that contains.png' },
       5: { title: 'CHAPTER 5', file: '', image: 'CAP%205.png' },
       6: { title: 'CHAPTER 6', file: '', image: 'CAP%206.png' },
       7: { title: 'CHAPTER 7', file: '', image: 'CAP%207.png' },
@@ -149,7 +149,11 @@
         chapTitle.textContent = chapter.title;
         artImage.src = `assets/audiobookenglishimages/${chapter.image}`;
         if (chapter.file && chapter.file.trim() !== '') {
-          audio.src = encodeURI(`audiobookMusic/${chapter.file}`);
+          if (chapter.file.startsWith('http')) {
+            audio.src = chapter.file;
+          } else {
+            audio.src = encodeURI(`audiobookMusic/${chapter.file}`);
+          }
           audio.load();
         } else {
           audio.removeAttribute('src');
